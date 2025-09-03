@@ -3,8 +3,13 @@ import { useState } from 'react';
 import { View, useTheme, Grid } from '@aws-amplify/ui-react';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
+import Home from './pages/Home';
+import Models from './pages/Models';
+import History from './pages/History';
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 
-function App() {
+
+function Layout() {
     const { tokens } = useTheme();
     const [collapsed, setCollapsed] = useState(false);
 
@@ -24,14 +29,34 @@ function App() {
                 <Header />
             </View>
 
-            {/* Sidebar (pass collapsed + setter) */}
+            {/* Sidebar */}
             <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
 
             {/* Main Content */}
-            <View backgroundColor={tokens.colors.pink[40]}>
-                Main Content
+            <View backgroundColor={tokens.colors.pink[40]} padding="1rem">
+                <Outlet />
             </View>
         </Grid>
+    );
+}
+const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <Layout />,
+        children: [
+            { index: true, element: <Home /> },
+            { path: 'models', element: <Models /> },
+            { path: 'history', element: <History /> },
+        ],
+    },
+]);
+
+function App() {
+    const { tokens } = useTheme();
+    const [collapsed, setCollapsed] = useState(false);
+
+    return (
+        <RouterProvider router={router} />
     );
 }
 
