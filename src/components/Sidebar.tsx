@@ -1,46 +1,44 @@
-import { Flex, Button } from '@aws-amplify/ui-react';
+import { Flex, Button, Text } from '@aws-amplify/ui-react';
+import { Home, Box, History, ChevronLeft, ChevronRight } from 'lucide-react';
 
-export default function Sidebar() {
+interface SidebarProps {
+    collapsed: boolean;
+    setCollapsed: (collapsed: boolean) => void;
+}
+
+export default function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
     return (
         <Flex
-            as="nav"
             direction="column"
-            alignItems="flex-start"
+            alignItems={collapsed ? 'center' : 'flex-start'}
             padding="1rem"
             gap="1rem"
-            width="250px"
-            height="100vh"
+            width={collapsed ? '80px' : '250px'}
+            height="100%"
             backgroundColor="var(--amplify-colors-background-secondary)"
             boxShadow="small"
         >
+            {/* Collapse/Expand button */}
             <Button
                 variation="link"
-                justifyContent="flex-start"
+                onClick={() => setCollapsed(!collapsed)}
+                justifyContent={collapsed ? 'center' : 'flex-start'}
                 width="100%"
-                fontSize="lg"
-                gap="0.5rem"
             >
-                Home
+                {collapsed ? <ChevronRight /> : <ChevronLeft />}
             </Button>
 
-            <Button
-                variation="link"
-                justifyContent="flex-start"
-                width="100%"
-                fontSize="lg"
-                gap="0.5rem"
-            >
-                Models
+            {/* Tabs */}
+            <Button variation="link" justifyContent={collapsed ? 'center' : 'flex-start'} width="100%" gap="0.5rem">
+                <Home size={20} /> {!collapsed && <Text>Home</Text>}
             </Button>
 
-            <Button
-                variation="link"
-                justifyContent="flex-start"
-                width="100%"
-                fontSize="lg"
-                gap="0.5rem"
-            >
-                History
+            <Button variation="link" justifyContent={collapsed ? 'center' : 'flex-start'} width="100%" gap="0.5rem">
+                <Box size={20} /> {!collapsed && <Text>Models</Text>}
+            </Button>
+
+            <Button variation="link" justifyContent={collapsed ? 'center' : 'flex-start'} width="100%" gap="0.5rem">
+                <History size={20} /> {!collapsed && <Text>History</Text>}
             </Button>
         </Flex>
     );
