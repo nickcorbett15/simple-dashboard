@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  web:
+    build: .
+    ports:
+      - "5173:5173"
+    working_dir: /app
+    volumes:
+      - .:/app:delegated
+      # keep container's node_modules (don’t shadow with the bind mount)
+      - /app/node_modules
+    environment:
+      # extra nudge for file watching on some hosts
+      - CHOKIDAR_USEPOLLING=true
+      - HOST=0.0.0.0
+      - PORT=5173
+    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "5173", "--strictPort"]
